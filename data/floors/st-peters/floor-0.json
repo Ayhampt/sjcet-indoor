@@ -3,88 +3,152 @@
   "floorLevel": 0,
   "metadata": {
     "name": "Ground Floor",
-    "viewBox": "0 0 1000 1000"
+    "viewBox": "0 0 1200 1200",
+    "dimensions": { "width": 1200, "height": 1200 }
   },
   "rooms": [
     {
       "id": "MB_G_101",
-      "name": "Lecture Hall",
-      "x": 100,
-      "y": 100,
-      "w": 250,
-      "h": 400,
-      "type": "lecture"
+      "name": "Lecture Hall 101",
+      "x": 120,
+      "y": 320,
+      "w": 280,
+      "h": 320,
+      "type": "lecture",
+      "description": "Lecture Hall"
     },
     {
       "id": "MB_G_103",
-      "name": "Gents Waiting Room",
-      "x": 400,
-      "y": 100,
-      "w": 150,
-      "h": 250,
-      "type": "waiting"
+      "name": "Gents Waiting Room 103",
+      "x": 420,
+      "y": 240,
+      "w": 160,
+      "h": 200,
+      "type": "waiting",
+      "description": "Gents Waiting Room"
     },
     {
       "id": "MB_G_104",
-      "name": "Gents Toilet",
-      "x": 600,
-      "y": 80,
-      "w": 180,
-      "h": 100,
-      "type": "restroom"
+      "name": "Gents Toilet 104",
+      "x": 620,
+      "y": 160,
+      "w": 140,
+      "h": 140,
+      "type": "restroom",
+      "description": "Gents Toilet"
     },
     {
       "id": "MB_G_105",
-      "name": "Lecture Hall",
-      "x": 600,
-      "y": 200,
-      "w": 250,
-      "h": 300,
-      "type": "lecture"
+      "name": "Lecture Hall 105",
+      "x": 800,
+      "y": 280,
+      "w": 280,
+      "h": 360,
+      "type": "lecture",
+      "description": "Lecture Hall"
     },
     {
-      "id": "MB_G_110",
-      "name": "Lecture Hall",
-      "x": 100,
-      "y": 600,
-      "w": 250,
-      "h": 350,
-      "type": "lecture"
+      "id": "MB_G_106",
+      "name": "Lecture Hall 106",
+      "x": 520,
+      "y": 620,
+      "w": 280,
+      "h": 280,
+      "type": "lecture",
+      "description": "Lecture Hall"
+    },
+    {
+      "id": "MB_G_107",
+      "name": "Ladies Toilet 107",
+      "x": 800,
+      "y": 720,
+      "w": 140,
+      "h": 140,
+      "type": "restroom",
+      "description": "Ladies Toilet"
     },
     {
       "id": "MB_G_108",
-      "name": "Ladies Waiting Room",
-      "x": 400,
-      "y": 700,
-      "w": 150,
-      "h": 250,
-      "type": "waiting"
+      "name": "Ladies Waiting Room 108",
+      "x": 280,
+      "y": 720,
+      "w": 160,
+      "h": 200,
+      "type": "waiting",
+      "description": "Ladies Waiting Room"
+    },
+    {
+      "id": "MB_G_110",
+      "name": "Lecture Hall 110",
+      "x": 120,
+      "y": 720,
+      "w": 140,
+      "h": 200,
+      "type": "lecture",
+      "description": "Lecture Hall"
     }
   ],
   "navigation": {
     "nodes": [
-      { "id": "MB_G_N1", "x": 375, "y": 500, "type": "hallway" },
-      { "id": "MB_G_N2", "x": 575, "y": 500, "type": "hallway" },
       {
-        "id": "MB_G_QR_ENTRY",
-        "x": 500,
-        "y": 500,
-        "type": "qr_point",
-        "label": "Center QR"
+        "id": "MB_G_J1",
+        "x": 420,
+        "y": 460,
+        "type": "junction",
+        "label": "Central Junction 1"
       },
       {
-        "id": "MB_G_STAIRS",
+        "id": "MB_G_J2",
+        "x": 620,
+        "y": 460,
+        "type": "junction",
+        "label": "Central Junction 2"
+      },
+      {
+        "id": "MB_G_J3",
+        "x": 420,
+        "y": 620,
+        "type": "junction",
+        "label": "Lower Junction 1"
+      },
+      {
+        "id": "MB_G_J4",
         "x": 800,
+        "y": 620,
+        "type": "junction",
+        "label": "Right Junction"
+      },
+      {
+        "id": "MB_G_STAIRS_G",
+        "x": 1000,
         "y": 500,
         "type": "portal",
-        "targetFloor": 1
+        "targetFloor": 1,
+        "label": "Stairs to Floor 1"
+      },
+      {
+        "id": "MB_G_ENTRY",
+        "x": 100,
+        "y": 500,
+        "type": "entry",
+        "label": "Main Entry"
       }
     ],
     "edges": [
-      { "from": "MB_G_QR_ENTRY", "to": "MB_G_N1", "weight": 125 },
-      { "from": "MB_G_QR_ENTRY", "to": "MB_G_N2", "weight": 75 },
-      { "from": "MB_G_N1", "to": "MB_G_101", "weight": 200 },
-      { "from": "MB_G_N2", "to": "MB_G_STAIRS", "weight": 150 }
+      { "from": "MB_G_ENTRY", "to": "MB_G_J1", "weight": 150 },
+      { "from": "MB_G_J1", "to": "MB_G_J2", "weight": 100 },
+      { "from": "MB_G_J1", "to": "MB_G_J3", "weight": 100 },
+      { "from": "MB_G_J2", "to": "MB_G_J4", "weight": 120 },
+      { "from": "MB_G_J3", "to": "MB_G_J4", "weight": 150 },
+      { "from": "MB_G_J2", "to": "MB_G_STAIRS_G", "weight": 200 },
+      { "from": "MB_G_101", "to": "MB_G_J1", "weight": 80 },
+      { "from": "MB_G_103", "to": "MB_G_J1", "weight": 100 },
+      { "from": "MB_G_104", "to": "MB_G_J2", "weight": 80 },
+      { "from": "MB_G_105", "to": "MB_G_J2", "weight": 100 },
+      { "from": "MB_G_106", "to": "MB_G_J4", "weight": 100 },
+      { "from": "MB_G_107", "to": "MB_G_J4", "weight": 80 },
+      { "from": "MB_G_108", "to": "MB_G_J3", "weight": 100 },
+      { "from": "MB_G_110", "to": "MB_G_J3", "weight": 80 }
     ]
   }
 }

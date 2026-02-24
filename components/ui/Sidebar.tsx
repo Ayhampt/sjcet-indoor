@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Room } from '@/types/map.d';
+import { LocationSelector } from '@/components/LocationSelector';
 
 interface SidebarProps {
   searchQuery: string;
@@ -21,6 +22,7 @@ interface SidebarProps {
     direction: 'up' | 'down';
     floors: number;
   } | null;
+  allRooms?: (Room & { floorLevel: number })[];
 }
 
 export function Sidebar({
@@ -38,9 +40,47 @@ export function Sidebar({
   onFloorChange,
   availableFloors = [0, 1, 2],
   nextFloorChange,
+  allRooms = [],
 }: SidebarProps) {
+  const [startLocation, setStartLocation] = useState<Room | null>(null);
+  const [endLocation, setEndLocation] = useState<Room | null>(null);
+
+  const handleStartSelect = (room: Room) => {
+    setStartLocation(room);
+  };
+
+  const handleEndSelect = (room: Room) => {
+    setEndLocation(room);
+    // Auto-navigate to end location
+    if (room && 'floorLevel' in room) {
+      onRoomSelect(room as Room & { floorLevel: number });
+    }
+  };
+
   return (
-    <aside className="w-80 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col h-full shadow-sm">
+    <aside className="w-80 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col h-full shadow-sm overflow-hidden">
+      {/* Location Selector Section */}
+      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex-shrink-0 overflow-y-auto">
+        <LocationSelector
+          startLocation={startLocation}
+          endLocation={endLocation}
+          onStartSelect={handleStartSelect}
+          onEndSelect={handleEndSelect}
+          availableRooms={allRooms.map(r => ({
+            id: r.id,
+            name: r.name,
+            x: r.x,
+            y: r.y,
+            w: r.w,
+            h: r.h,
+            type: r.type,
+            description: r.description,
+            floorLevel: r.floorLevel
+          }))}
+          currentFloor={currentFloor}
+        />
+      </div>
+
       {/* Search section */}
       <div className="p-6 border-b border-slate-200 dark:border-slate-800 space-y-3">
         <label className="text-xs font-semibold text-slate-500 uppercase tracking-widest">

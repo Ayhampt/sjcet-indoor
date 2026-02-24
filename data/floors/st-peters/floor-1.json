@@ -3,108 +3,164 @@
   "floorLevel": 1,
   "metadata": {
     "name": "First Floor",
-    "viewBox": "0 0 1000 1000"
+    "viewBox": "0 0 1200 1200",
+    "dimensions": { "width": 1200, "height": 1200 }
   },
   "rooms": [
     {
       "id": "MB_F1_201",
-      "name": "Computer Lab",
-      "x": 100,
-      "y": 100,
-      "w": 250,
-      "h": 400,
-      "type": "lab"
+      "name": "Lecture Hall 201",
+      "x": 120,
+      "y": 240,
+      "w": 280,
+      "h": 280,
+      "type": "lecture",
+      "description": "Lecture Hall"
     },
     {
       "id": "MB_F1_202",
-      "name": "Classroom A",
-      "x": 400,
-      "y": 100,
+      "name": "Faculty Room 202",
+      "x": 420,
+      "y": 120,
       "w": 200,
-      "h": 250,
-      "type": "classroom"
+      "h": 280,
+      "type": "office",
+      "description": "Faculty Room"
     },
     {
       "id": "MB_F1_203",
-      "name": "Faculty Office",
-      "x": 650,
-      "y": 80,
-      "w": 180,
-      "h": 120,
-      "type": "office"
+      "name": "Professor & Head 203",
+      "x": 640,
+      "y": 120,
+      "w": 240,
+      "h": 320,
+      "type": "office",
+      "description": "Professor & Head"
     },
     {
       "id": "MB_F1_204",
-      "name": "Science Lab 402",
-      "x": 600,
-      "y": 200,
-      "w": 280,
-      "h": 320,
-      "type": "lab"
+      "name": "Faculty Room 204",
+      "x": 640,
+      "y": 480,
+      "w": 240,
+      "h": 240,
+      "type": "office",
+      "description": "Faculty Room"
     },
     {
       "id": "MB_F1_205",
-      "name": "Seminar Room",
-      "x": 100,
-      "y": 600,
-      "w": 250,
-      "h": 350,
-      "type": "seminar"
+      "name": "Faculty Room 205",
+      "x": 420,
+      "y": 520,
+      "w": 200,
+      "h": 280,
+      "type": "office",
+      "description": "Faculty Room"
     },
     {
       "id": "MB_F1_206",
-      "name": "Library Area",
-      "x": 400,
-      "y": 700,
-      "w": 200,
-      "h": 250,
-      "type": "library"
+      "name": "HoD Room 206",
+      "x": 640,
+      "y": 760,
+      "w": 240,
+      "h": 200,
+      "type": "office",
+      "description": "HoD Room"
     },
     {
       "id": "MB_F1_207",
-      "name": "Restroom",
-      "x": 700,
-      "y": 600,
-      "w": 150,
-      "h": 100,
-      "type": "restroom"
+      "name": "Department Library 207",
+      "x": 280,
+      "y": 680,
+      "w": 360,
+      "h": 280,
+      "type": "library",
+      "description": "Department Library & Reprographic Centre"
+    },
+    {
+      "id": "MB_F1_208",
+      "name": "Lecture Hall 208",
+      "x": 120,
+      "y": 640,
+      "w": 140,
+      "h": 320,
+      "type": "lecture",
+      "description": "Lecture Hall"
+    },
+    {
+      "id": "MB_F1_209",
+      "name": "ML/DL Lab 209",
+      "x": 420,
+      "y": 850,
+      "w": 280,
+      "h": 130,
+      "type": "lab",
+      "description": "Machine Learning and Deep Learning Lab"
     }
   ],
   "navigation": {
     "nodes": [
-      { "id": "MB_F1_N1", "x": 375, "y": 500, "type": "hallway" },
-      { "id": "MB_F1_N2", "x": 575, "y": 500, "type": "hallway" },
-      { "id": "MB_F1_N3", "x": 650, "y": 400, "type": "hallway" },
       {
-        "id": "MB_F1_CENTER",
-        "x": 500,
-        "y": 500,
-        "type": "hallway",
-        "label": "Central Hub"
+        "id": "MB_F1_J1",
+        "x": 420,
+        "y": 400,
+        "type": "junction",
+        "label": "Upper Junction"
       },
       {
-        "id": "MB_F1_STAIRS",
-        "x": 800,
+        "id": "MB_F1_J2",
+        "x": 640,
+        "y": 400,
+        "type": "junction",
+        "label": "Central Junction"
+      },
+      {
+        "id": "MB_F1_J3",
+        "x": 420,
+        "y": 700,
+        "type": "junction",
+        "label": "Lower Junction"
+      },
+      {
+        "id": "MB_F1_J4",
+        "x": 640,
+        "y": 700,
+        "type": "junction",
+        "label": "Right Junction"
+      },
+      {
+        "id": "MB_F1_STAIRS_DOWN",
+        "x": 1000,
         "y": 500,
         "type": "portal",
-        "targetFloor": 0
+        "targetFloor": 0,
+        "label": "Stairs to Ground"
       },
       {
         "id": "MB_F1_STAIRS_UP",
-        "x": 800,
+        "x": 1000,
         "y": 300,
         "type": "portal",
-        "targetFloor": 2
+        "targetFloor": 2,
+        "label": "Stairs to Floor 2"
       }
     ],
     "edges": [
-      { "from": "MB_F1_CENTER", "to": "MB_F1_N1", "weight": 125 },
-      { "from": "MB_F1_CENTER", "to": "MB_F1_N2", "weight": 75 },
-      { "from": "MB_F1_CENTER", "to": "MB_F1_N3", "weight": 150 },
-      { "from": "MB_F1_N1", "to": "MB_F1_201", "weight": 200 },
-      { "from": "MB_F1_N2", "to": "MB_F1_204", "weight": 150 },
-      { "from": "MB_F1_N3", "to": "MB_F1_STAIRS_UP", "weight": 100 },
-      { "from": "MB_F1_CENTER", "to": "MB_F1_STAIRS", "weight": 200 }
+      { "from": "MB_F1_J1", "to": "MB_F1_J2", "weight": 100 },
+      { "from": "MB_F1_J1", "to": "MB_F1_J3", "weight": 150 },
+      { "from": "MB_F1_J2", "to": "MB_F1_J4", "weight": 150 },
+      { "from": "MB_F1_J3", "to": "MB_F1_J4", "weight": 100 },
+      { "from": "MB_F1_J2", "to": "MB_F1_STAIRS_DOWN", "weight": 200 },
+      { "from": "MB_F1_J2", "to": "MB_F1_STAIRS_UP", "weight": 180 },
+      { "from": "MB_F1_201", "to": "MB_F1_J1", "weight": 80 },
+      { "from": "MB_F1_202", "to": "MB_F1_J1", "weight": 100 },
+      { "from": "MB_F1_203", "to": "MB_F1_J2", "weight": 80 },
+      { "from": "MB_F1_204", "to": "MB_F1_J2", "weight": 100 },
+      { "from": "MB_F1_205", "to": "MB_F1_J3", "weight": 80 },
+      { "from": "MB_F1_206", "to": "MB_F1_J4", "weight": 80 },
+      { "from": "MB_F1_207", "to": "MB_F1_J3", "weight": 120 },
+      { "from": "MB_F1_208", "to": "MB_F1_J3", "weight": 100 },
+      { "from": "MB_F1_209", "to": "MB_F1_J3", "weight": 100 }
     ]
   }
 }

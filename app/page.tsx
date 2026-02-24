@@ -113,6 +113,12 @@ export default function Home() {
             onFloorChange={setCurrentFloor}
             availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
             nextFloorChange={nextFloorChange}
+            allRooms={FLOORS_DATA.flatMap((floor) =>
+              floor.rooms.map((room) => ({
+                ...room,
+                floorLevel: floor.floorLevel,
+              }))
+            )}
           />
         )}
 
