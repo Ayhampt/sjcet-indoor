@@ -52,7 +52,7 @@ export default function Home() {
   const currentFloorData = FLOORS_DATA.find((f) => f.floorLevel === currentFloor);
 
   return (
-    <div className="w-full h-screen bg-slate-100 dark:bg-slate-900 flex flex-col md:flex-row overflow-hidden">
+    <div className="w-full h-screen bg-slate-100 dark:bg-slate-900 flex flex-col overflow-hidden">
       {/* Header */}
       <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 backdrop-blur-md flex items-center justify-between px-4 md:px-6 z-30 flex-shrink-0">
         <div className="flex items-center gap-2 md:gap-3">
@@ -94,30 +94,30 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main content */}
-      <div className="flex w-full h-full flex-col md:flex-row flex-1 overflow-hidden">
-        {/* Sidebar - hidden on mobile, shown as overlay when needed */}
+      {/* Main content - Grid layout for desktop, flex for mobile */}
+      <div className="flex flex-1 w-full h-full overflow-hidden">
+        {/* Sidebar - fixed width on desktop */}
         {!isMobile && (
           <Sidebar
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          searchResults={searchResults}
-          onRoomSelect={navigateTo}
-          selectedRoom={selectedDestination}
-          estimatedTime={navigationState?.estimatedTime}
-          distance={navigationState?.distance}
-          instructions={instructions}
-          navigationActive={!!navigationState}
-          onClearNavigation={clearNavigation}
-          currentFloor={currentFloor}
-          onFloorChange={setCurrentFloor}
-          availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
-          nextFloorChange={nextFloorChange}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            searchResults={searchResults}
+            onRoomSelect={navigateTo}
+            selectedRoom={selectedDestination}
+            estimatedTime={navigationState?.estimatedTime}
+            distance={navigationState?.distance}
+            instructions={instructions}
+            navigationActive={!!navigationState}
+            onClearNavigation={clearNavigation}
+            currentFloor={currentFloor}
+            onFloorChange={setCurrentFloor}
+            availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
+            nextFloorChange={nextFloorChange}
           />
         )}
 
-        {/* Map area */}
-        <main className="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950">
+        {/* Map area - flex-1 to take remaining space */}
+        <main className="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 flex items-center justify-center">
           {currentFloorData && (
             <>
               <MapCanvas
@@ -210,15 +210,15 @@ export default function Home() {
               distance={navigationState.distance}
             />
           )}
+
+          {/* Floor switcher - positioned inside map */}
+          <FloorSwitcher
+            currentFloor={currentFloor}
+            availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
+            onFloorChange={setCurrentFloor}
+          />
         </main>
       </div>
-
-      {/* Floor switcher */}
-      <FloorSwitcher
-        currentFloor={currentFloor}
-        availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
-        onFloorChange={setCurrentFloor}
-      />
     </div>
   );
 }

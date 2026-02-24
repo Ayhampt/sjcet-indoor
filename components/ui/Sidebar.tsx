@@ -130,7 +130,7 @@ export function Sidebar({
             </div>
 
             {/* Destination room info */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 space-y-3">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-6 space-y-3 border border-slate-200 dark:border-slate-800">
               <p className="text-xs font-semibold text-slate-500 uppercase">Destination</p>
               <h4 className="font-bold text-slate-900 dark:text-white text-lg">{selectedRoom.name}</h4>
               <p className="text-xs text-slate-600 dark:text-slate-400">{selectedRoom.id}</p>

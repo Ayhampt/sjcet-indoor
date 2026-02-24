@@ -17,8 +17,8 @@ export function DestinationCard({
   distance,
 }: DestinationCardProps) {
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 max-w-lg w-full mx-4 pointer-events-none z-10">
-      <div className="bg-white dark:bg-slate-900 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-xl p-6 flex items-center gap-4 shadow-xl pointer-events-auto animate-slide-up">
+    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 max-w-lg w-full mx-4 pointer-events-none z-10">
+      <div className="bg-white dark:bg-slate-900 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-xl p-6 flex items-center gap-4 shadow-xl pointer-events-auto animate-slide-up hover:shadow-2xl transition-shadow">
         {/* Room image placeholder */}
         <div className="h-20 w-24 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 overflow-hidden flex items-center justify-center">
           <svg
