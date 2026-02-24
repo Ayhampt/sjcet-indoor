@@ -205,6 +205,68 @@ export function MapCanvas({
           );
         })}
 
+        {/* Junction nodes */}
+        {floorData.navigation?.nodes?.map((node) => {
+          const isPortal = node.type === 'portal';
+          const isJunction = node.type === 'junction';
+
+          if (isPortal) {
+            return (
+              <g key={node.id}>
+                {/* Portal - stairs/elevator */}
+                <rect
+                  x={node.x - 12}
+                  y={node.y - 12}
+                  width="24"
+                  height="24"
+                  fill="#f59e0b"
+                  stroke="#d97706"
+                  strokeWidth="1.5"
+                  rx="3"
+                  opacity="0.7"
+                />
+                <text
+                  x={node.x}
+                  y={node.y}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="text-[8px] font-bold pointer-events-none"
+                  fill="#7c2d12"
+                >
+                  ⇅
+                </text>
+              </g>
+            );
+          }
+
+          if (isJunction) {
+            return (
+              <g key={node.id}>
+                {/* Junction circle */}
+                <circle
+                  cx={node.x}
+                  cy={node.y}
+                  r="6"
+                  fill="#10b981"
+                  opacity="0.6"
+                  className="hover:opacity-100 transition-opacity"
+                />
+                <circle
+                  cx={node.x}
+                  cy={node.y}
+                  r="6"
+                  fill="none"
+                  stroke="#059669"
+                  strokeWidth="1"
+                  opacity="0.4"
+                />
+              </g>
+            );
+          }
+
+          return null;
+        })}
+
         {/* Navigation path */}
         {pathSegments.length > 1 && (
           <>

@@ -52,7 +52,7 @@ export default function Home() {
   const currentFloorData = FLOORS_DATA.find((f) => f.floorLevel === currentFloor);
 
   return (
-    <div className="w-full h-screen bg-slate-100 dark:bg-slate-900 flex flex-col md:flex-row overflow-hidden">
+    <div className="w-full h-screen bg-slate-100 dark:bg-slate-900 flex flex-col overflow-hidden">
       {/* Header */}
       <header className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 backdrop-blur-md flex items-center justify-between px-4 md:px-6 z-30 flex-shrink-0">
         <div className="flex items-center gap-2 md:gap-3">
@@ -94,30 +94,36 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main content */}
-      <div className="flex w-full h-full flex-col md:flex-row flex-1 overflow-hidden">
-        {/* Sidebar - hidden on mobile, shown as overlay when needed */}
+      {/* Main content - Grid layout for desktop, flex for mobile */}
+      <div className="flex flex-1 w-full h-full overflow-hidden">
+        {/* Sidebar - fixed width on desktop */}
         {!isMobile && (
           <Sidebar
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          searchResults={searchResults}
-          onRoomSelect={navigateTo}
-          selectedRoom={selectedDestination}
-          estimatedTime={navigationState?.estimatedTime}
-          distance={navigationState?.distance}
-          instructions={instructions}
-          navigationActive={!!navigationState}
-          onClearNavigation={clearNavigation}
-          currentFloor={currentFloor}
-          onFloorChange={setCurrentFloor}
-          availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
-          nextFloorChange={nextFloorChange}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            searchResults={searchResults}
+            onRoomSelect={navigateTo}
+            selectedRoom={selectedDestination}
+            estimatedTime={navigationState?.estimatedTime}
+            distance={navigationState?.distance}
+            instructions={instructions}
+            navigationActive={!!navigationState}
+            onClearNavigation={clearNavigation}
+            currentFloor={currentFloor}
+            onFloorChange={setCurrentFloor}
+            availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
+            nextFloorChange={nextFloorChange}
+            allRooms={FLOORS_DATA.flatMap((floor) =>
+              floor.rooms.map((room) => ({
+                ...room,
+                floorLevel: floor.floorLevel,
+              }))
+            )}
           />
         )}
 
-        {/* Map area */}
-        <main className="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950">
+        {/* Map area - flex-1 to take remaining space */}
+        <main className="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 flex items-center justify-center">
           {currentFloorData && (
             <>
               <MapCanvas
@@ -147,21 +153,23 @@ export default function Home() {
                 </span>
               </div>
 
-              {/* Zoom controls */}
-              <div className="absolute bottom-6 right-6 flex flex-col gap-2">
-                <div className="flex bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+              {/* Right control bar - grouped and aligned */}
+              <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-3">
+                {/* Zoom controls */}
+                <div className="flex flex-col bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
                   <button className="w-10 h-10 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                   </button>
-                  <div className="w-px bg-slate-200 dark:bg-slate-700" />
+                  <div className="h-px bg-slate-200 dark:bg-slate-700" />
                   <button className="w-10 h-10 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 dark:text-slate-400">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                     </svg>
                   </button>
                 </div>
+                {/* Locate me button */}
                 <button className="w-10 h-10 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -208,15 +216,15 @@ export default function Home() {
               distance={navigationState.distance}
             />
           )}
+
+          {/* Floor switcher - positioned inside map */}
+          <FloorSwitcher
+            currentFloor={currentFloor}
+            availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
+            onFloorChange={setCurrentFloor}
+          />
         </main>
       </div>
-
-      {/* Floor switcher */}
-      <FloorSwitcher
-        currentFloor={currentFloor}
-        availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
-        onFloorChange={setCurrentFloor}
-      />
     </div>
   );
 }

@@ -17,7 +17,7 @@ export function FloorSwitcher({
   const sortedFloors = [...availableFloors].sort((a, b) => b - a);
 
   return (
-    <div className="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-3 bg-white dark:bg-slate-900 backdrop-blur-md p-2 rounded-full border border-slate-200 dark:border-slate-800 shadow-lg z-40">
+    <div className="fixed right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 bg-white dark:bg-slate-900 backdrop-blur-md p-2 rounded-lg border border-slate-200 dark:border-slate-800 shadow-lg z-40">
       {/* Scroll up button */}
       <button
         onClick={() => {
@@ -45,7 +45,7 @@ export function FloorSwitcher({
       </button>
 
       {/* Floor buttons */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 py-1">
         {sortedFloors.map((floor) => (
           <button
             key={floor}
