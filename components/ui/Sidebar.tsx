@@ -42,7 +42,7 @@ export function Sidebar({
   return (
     <aside className="w-80 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col h-full shadow-sm">
       {/* Search section */}
-      <div className="p-5 space-y-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="p-6 border-b border-slate-200 dark:border-slate-800 space-y-3">
         <label className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
           Search Destination
         </label>
@@ -74,70 +74,68 @@ export function Sidebar({
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {navigationActive && selectedRoom ? (
           // Live navigation status
-          <div className="p-5 space-y-4">
-            <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl p-5 text-white shadow-lg">
-              <div className="flex items-center gap-2 mb-4">
+          <div className="p-6 space-y-6">
+            <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl p-6 text-white shadow-lg">
+              <div className="flex items-center gap-2 mb-6">
                 <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
                 <span className="text-xs font-bold uppercase tracking-wider">
                   Live Navigation
                 </span>
               </div>
 
-              <div className="mb-4">
-                <p className="text-white/70 text-xs mb-1">Estimated Arrival</p>
-                <h3 className="text-3xl font-bold">
-                  {estimatedTime} <span className="text-lg font-normal opacity-80">min</span>
-                </h3>
+              {/* Metrics grid - 2 columns */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <p className="text-white/70 text-xs mb-2">Estimated Arrival</p>
+                  <h3 className="text-2xl font-bold">
+                    {estimatedTime} <span className="text-sm font-normal opacity-80">min</span>
+                  </h3>
+                </div>
+                <div>
+                  <p className="text-white/70 text-xs mb-2">Distance</p>
+                  <h3 className="text-2xl font-bold">
+                    {distance} <span className="text-sm font-normal opacity-80">m</span>
+                  </h3>
+                </div>
               </div>
 
               {/* Instructions */}
-              <div className="space-y-3 mb-4">
-                {instructions && instructions.length > 0 && (
-                  <div className="space-y-2">
-                    {instructions.slice(0, 2).map((instruction, i) => (
-                      <div key={i} className="flex items-start gap-2 text-sm">
-                        <div className="h-1 w-1 rounded-full bg-white mt-2 flex-shrink-0" />
-                        <p className="text-white/90">{instruction}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Distance and floor change warning */}
-              <div className="space-y-3 pt-3 border-t border-white/20">
-                <div className="flex justify-between">
-                  <span className="text-xs font-semibold text-white/70">Distance</span>
-                  <span className="text-sm font-bold">
-                    {distance} <span className="text-xs font-normal">m</span>
-                  </span>
+              {instructions && instructions.length > 0 && (
+                <div className="space-y-3 mb-6 pb-6 border-b border-white/20">
+                  {instructions.slice(0, 2).map((instruction, i) => (
+                    <div key={i} className="flex items-start gap-2 text-sm">
+                      <div className="h-1 w-1 rounded-full bg-white mt-1.5 flex-shrink-0" />
+                      <p className="text-white/90">{instruction}</p>
+                    </div>
+                  ))}
                 </div>
+              )}
 
-                {nextFloorChange && (
-                  <div className="bg-white/20 rounded-lg p-2 text-xs">
-                    <p className="font-semibold">
-                      Proceed {nextFloorChange.direction} {nextFloorChange.floors}{' '}
-                      floor{nextFloorChange.floors > 1 ? 's' : ''}
-                    </p>
-                  </div>
-                )}
-              </div>
+              {/* Floor change warning */}
+              {nextFloorChange && (
+                <div className="bg-white/20 rounded-lg p-3 text-xs mb-6">
+                  <p className="font-semibold">
+                    Proceed {nextFloorChange.direction} {nextFloorChange.floors}{' '}
+                    floor{nextFloorChange.floors > 1 ? 's' : ''}
+                  </p>
+                </div>
+              )}
 
               <button
                 onClick={onClearNavigation}
-                className="w-full mt-4 bg-white text-blue-600 px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors"
+                className="w-full bg-white text-blue-600 px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors"
               >
                 Clear Navigation
               </button>
             </div>
 
             {/* Destination room info */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-4 space-y-2">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 space-y-3">
               <p className="text-xs font-semibold text-slate-500 uppercase">Destination</p>
-              <h4 className="font-bold text-slate-900 dark:text-white">{selectedRoom.name}</h4>
+              <h4 className="font-bold text-slate-900 dark:text-white text-lg">{selectedRoom.name}</h4>
               <p className="text-xs text-slate-600 dark:text-slate-400">{selectedRoom.id}</p>
               {selectedRoom.description && (
-                <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
                   {selectedRoom.description}
                 </p>
               )}

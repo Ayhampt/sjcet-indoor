@@ -17,12 +17,12 @@ export function DestinationCard({
   distance,
 }: DestinationCardProps) {
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 max-w-lg w-full mx-4 pointer-events-none">
-      <div className="bg-white dark:bg-slate-900 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-4 shadow-xl pointer-events-auto animate-slide-up">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 max-w-lg w-full mx-4 pointer-events-none z-10">
+      <div className="bg-white dark:bg-slate-900 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-xl p-6 flex items-center gap-4 shadow-xl pointer-events-auto animate-slide-up">
         {/* Room image placeholder */}
-        <div className="h-16 w-20 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 overflow-hidden flex items-center justify-center">
+        <div className="h-20 w-24 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 overflow-hidden flex items-center justify-center">
           <svg
-            className="w-8 h-8 text-white opacity-80"
+            className="w-10 h-10 text-white opacity-90"
             fill="currentColor"
             viewBox="0 0 24 24"
           >
@@ -32,10 +32,10 @@ export function DestinationCard({
 
         {/* Room info */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-bold text-sm text-slate-900 dark:text-white truncate">
+          <h3 className="font-bold text-base text-slate-900 dark:text-white truncate">
             {room.name}
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+          <p className="text-xs text-slate-600 dark:text-slate-400 truncate">
             {room.id}
           </p>
           {estimatedTime && distance && (
@@ -79,10 +79,10 @@ export function DestinationCard({
         {/* Navigate button */}
         <button
           onClick={onNavigate}
-          className="flex-shrink-0 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95"
+          className="flex-shrink-0 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all active:scale-95"
         >
           <svg
-            className="w-5 h-5"
+            className="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -91,7 +91,7 @@ export function DestinationCard({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
             />
           </svg>
         </button>
