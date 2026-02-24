@@ -7,104 +7,150 @@
   },
   "rooms": [
     {
-      "id": "MB_F1_201",
-      "name": "Computer Lab",
-      "x": 100,
-      "y": 100,
-      "w": 250,
-      "h": 400,
-      "type": "lab"
-    },
-    {
-      "id": "MB_F1_202",
-      "name": "Classroom A",
-      "x": 400,
-      "y": 100,
-      "w": 200,
-      "h": 250,
-      "type": "classroom"
-    },
-    {
-      "id": "MB_F1_203",
-      "name": "Faculty Office",
-      "x": 650,
-      "y": 80,
-      "w": 180,
-      "h": 120,
-      "type": "office"
-    },
-    {
-      "id": "MB_F1_204",
-      "name": "Science Lab 402",
-      "x": 600,
-      "y": 200,
-      "w": 280,
-      "h": 320,
-      "type": "lab"
-    },
-    {
-      "id": "MB_F1_205",
-      "name": "Seminar Room",
-      "x": 100,
-      "y": 600,
-      "w": 250,
-      "h": 350,
-      "type": "seminar"
-    },
-    {
-      "id": "MB_F1_206",
-      "name": "Library Area",
-      "x": 400,
-      "y": 700,
-      "w": 200,
-      "h": 250,
-      "type": "library"
-    },
-    {
-      "id": "MB_F1_207",
-      "name": "Restroom",
-      "x": 700,
-      "y": 600,
+      "id": "SP_1_201",
+      "name": "Lecture Hall",
+      "roomNumber": "201",
+      "x": 330,
+      "y": 60,
       "w": 150,
-      "h": 100,
-      "type": "restroom"
+      "h": 210,
+      "type": "lecture",
+      "color": "#9FA8DA"
+    },
+    {
+      "id": "SP_1_202",
+      "name": "Faculty Room",
+      "roomNumber": "202",
+      "x": 60,
+      "y": 60,
+      "w": 260,
+      "h": 280,
+      "type": "faculty",
+      "color": "#A5D6A7"
+    },
+    {
+      "id": "SP_1_203",
+      "name": "Professor & Head",
+      "roomNumber": "203",
+      "x": 490,
+      "y": 60,
+      "w": 310,
+      "h": 185,
+      "type": "office",
+      "color": "#F48FB1"
+    },
+    {
+      "id": "SP_1_204",
+      "name": "Faculty Room",
+      "roomNumber": "204",
+      "x": 490,
+      "y": 255,
+      "w": 310,
+      "h": 220,
+      "type": "faculty",
+      "color": "#CE93D8"
+    },
+    {
+      "id": "SP_1_205",
+      "name": "Faculty Room",
+      "roomNumber": "205",
+      "x": 490,
+      "y": 485,
+      "w": 310,
+      "h": 220,
+      "type": "faculty",
+      "color": "#80CBC4"
+    },
+    {
+      "id": "SP_1_206",
+      "name": "HoD Room",
+      "roomNumber": "206",
+      "x": 490,
+      "y": 715,
+      "w": 310,
+      "h": 175,
+      "type": "office",
+      "color": "#FFF176"
+    },
+    {
+      "id": "SP_1_207",
+      "name": "Department Library & Reprographic Centre",
+      "roomNumber": "207",
+      "x": 330,
+      "y": 620,
+      "w": 150,
+      "h": 290,
+      "type": "library",
+      "color": "#C5E1A5"
+    },
+    {
+      "id": "SP_1_208",
+      "name": "Lecture Hall",
+      "roomNumber": "208",
+      "x": 60,
+      "y": 480,
+      "w": 260,
+      "h": 460,
+      "type": "lecture",
+      "color": "#FFAB91"
+    },
+    {
+      "id": "SP_1_209",
+      "name": "Machine Learning and Deep Learning Lab",
+      "roomNumber": "209",
+      "x": 60,
+      "y": 350,
+      "w": 260,
+      "h": 120,
+      "type": "lab",
+      "color": "#81D4FA"
     }
+  ],
+  "staircases": [
+    {
+      "id": "SP_1_STAIR_A",
+      "x": 335,
+      "y": 290,
+      "w": 55,
+      "h": 55,
+      "label": "Stair A"
+    },
+    {
+      "id": "SP_1_STAIR_B",
+      "x": 335,
+      "y": 530,
+      "w": 55,
+      "h": 55,
+      "label": "Stair B"
+    }
+  ],
+  "entries": [
+    { "id": "SP_1_ENTRY_N",  "x": 490, "y": 60,  "direction": "south", "label": "North Entry" },
+    { "id": "SP_1_ENTRY_S",  "x": 430, "y": 940, "direction": "north", "label": "South Entry" }
   ],
   "navigation": {
     "nodes": [
-      { "id": "MB_F1_N1", "x": 375, "y": 500, "type": "hallway" },
-      { "id": "MB_F1_N2", "x": 575, "y": 500, "type": "hallway" },
-      { "id": "MB_F1_N3", "x": 650, "y": 400, "type": "hallway" },
-      {
-        "id": "MB_F1_CENTER",
-        "x": 500,
-        "y": 500,
-        "type": "hallway",
-        "label": "Central Hub"
-      },
-      {
-        "id": "MB_F1_STAIRS",
-        "x": 800,
-        "y": 500,
-        "type": "portal",
-        "targetFloor": 0
-      },
-      {
-        "id": "MB_F1_STAIRS_UP",
-        "x": 800,
-        "y": 300,
-        "type": "portal",
-        "targetFloor": 2
-      }
+      { "id": "SP_1_N_HALL_N",      "x": 480, "y": 270, "type": "hallway" },
+      { "id": "SP_1_N_HALL_C",      "x": 480, "y": 490, "type": "hallway" },
+      { "id": "SP_1_N_HALL_S",      "x": 480, "y": 710, "type": "hallway" },
+      { "id": "SP_1_QR_ENTRY",      "x": 480, "y": 490, "type": "qr_point", "label": "First Floor Center QR" },
+      { "id": "SP_1_STAIR_PORTAL_DOWN", "x": 760, "y": 490, "type": "portal", "targetFloor": 0, "label": "Stairs to Ground Floor" },
+      { "id": "SP_1_STAIR_PORTAL_UP",   "x": 760, "y": 300, "type": "portal", "targetFloor": 2, "label": "Stairs to Second Floor" }
     ],
     "edges": [
-      { "from": "MB_F1_CENTER", "to": "MB_F1_N1", "weight": 125 },
-      { "from": "MB_F1_CENTER", "to": "MB_F1_N2", "weight": 75 },
-      { "from": "MB_F1_CENTER", "to": "MB_F1_N3", "weight": 150 },
-      { "from": "MB_F1_N1", "to": "MB_F1_201", "weight": 200 },
-      { "from": "MB_F1_N2", "to": "MB_F1_204", "weight": 150 },
-      { "from": "MB_F1_N3", "to": "MB_F1_STAIRS_UP", "weight": 100 },
-      { "from": "MB_F1_CENTER", "to": "MB_F1_STAIRS", "weight": 200 }
+      { "from": "SP_1_STAIR_PORTAL_DOWN", "to": "SP_1_N_HALL_C",     "weight": 280 },
+      { "from": "SP_1_STAIR_PORTAL_UP",   "to": "SP_1_N_HALL_N",     "weight": 280 },
+      { "from": "SP_1_N_HALL_C",          "to": "SP_1_N_HALL_N",     "weight": 220 },
+      { "from": "SP_1_N_HALL_C",          "to": "SP_1_N_HALL_S",     "weight": 220 },
+      { "from": "SP_1_N_HALL_N",          "to": "SP_1_201",           "weight": 100 },
+      { "from": "SP_1_N_HALL_N",          "to": "SP_1_202",           "weight": 190 },
+      { "from": "SP_1_N_HALL_N",          "to": "SP_1_203",           "weight": 130 },
+      { "from": "SP_1_N_HALL_N",          "to": "SP_1_204",           "weight": 110 },
+      { "from": "SP_1_N_HALL_C",          "to": "SP_1_205",           "weight": 110 },
+      { "from": "SP_1_N_HALL_C",          "to": "SP_1_209",           "weight": 160 },
+      { "from": "SP_1_N_HALL_S",          "to": "SP_1_206",           "weight": 110 },
+      { "from": "SP_1_N_HALL_S",          "to": "SP_1_207",           "weight": 100 },
+      { "from": "SP_1_N_HALL_S",          "to": "SP_1_208",           "weight": 190 }
     ]
   }
 }

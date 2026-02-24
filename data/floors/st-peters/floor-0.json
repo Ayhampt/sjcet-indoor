@@ -7,84 +7,140 @@
   },
   "rooms": [
     {
-      "id": "MB_G_101",
+      "id": "SP_G_101",
       "name": "Lecture Hall",
-      "x": 100,
-      "y": 100,
-      "w": 250,
-      "h": 400,
-      "type": "lecture"
+      "roomNumber": "101",
+      "x": 60,
+      "y": 60,
+      "w": 240,
+      "h": 380,
+      "type": "lecture",
+      "color": "#F48FB1"
     },
     {
-      "id": "MB_G_103",
+      "id": "SP_G_103",
       "name": "Gents Waiting Room",
-      "x": 400,
-      "y": 100,
-      "w": 150,
-      "h": 250,
-      "type": "waiting"
+      "roomNumber": "103",
+      "x": 310,
+      "y": 60,
+      "w": 140,
+      "h": 230,
+      "type": "waiting",
+      "color": "#D4E157"
     },
     {
-      "id": "MB_G_104",
+      "id": "SP_G_104",
       "name": "Gents Toilet",
-      "x": 600,
-      "y": 80,
+      "roomNumber": "104",
+      "x": 560,
+      "y": 60,
       "w": 180,
-      "h": 100,
-      "type": "restroom"
+      "h": 110,
+      "type": "restroom",
+      "color": "#FFCC80"
     },
     {
-      "id": "MB_G_105",
+      "id": "SP_G_105",
       "name": "Lecture Hall",
-      "x": 600,
-      "y": 200,
-      "w": 250,
-      "h": 300,
-      "type": "lecture"
+      "roomNumber": "105",
+      "x": 560,
+      "y": 180,
+      "w": 300,
+      "h": 270,
+      "type": "lecture",
+      "color": "#81D4FA"
     },
     {
-      "id": "MB_G_110",
+      "id": "SP_G_106",
       "name": "Lecture Hall",
-      "x": 100,
-      "y": 600,
-      "w": 250,
-      "h": 350,
-      "type": "lecture"
+      "roomNumber": "106",
+      "x": 560,
+      "y": 560,
+      "w": 300,
+      "h": 270,
+      "type": "lecture",
+      "color": "#66BB6A"
     },
     {
-      "id": "MB_G_108",
+      "id": "SP_G_107",
+      "name": "Ladies Toilet",
+      "roomNumber": "107",
+      "x": 560,
+      "y": 840,
+      "w": 180,
+      "h": 110,
+      "type": "restroom",
+      "color": "#EF9A9A"
+    },
+    {
+      "id": "SP_G_108",
       "name": "Ladies Waiting Room",
-      "x": 400,
+      "roomNumber": "108",
+      "x": 310,
       "y": 700,
-      "w": 150,
+      "w": 140,
       "h": 250,
-      "type": "waiting"
+      "type": "waiting",
+      "color": "#80DEEA"
+    },
+    {
+      "id": "SP_G_110",
+      "name": "Lecture Hall",
+      "roomNumber": "110",
+      "x": 60,
+      "y": 560,
+      "w": 240,
+      "h": 390,
+      "type": "lecture",
+      "color": "#CE93D8"
     }
+  ],
+  "staircases": [
+    {
+      "id": "SP_G_STAIR_A",
+      "x": 375,
+      "y": 320,
+      "w": 55,
+      "h": 55,
+      "label": "Stair A"
+    },
+    {
+      "id": "SP_G_STAIR_B",
+      "x": 375,
+      "y": 580,
+      "w": 55,
+      "h": 55,
+      "label": "Stair B"
+    }
+  ],
+  "entries": [
+    { "id": "SP_G_ENTRY_W",  "x": 60,  "y": 490, "direction": "east",  "label": "Main West Entry" },
+    { "id": "SP_G_ENTRY_E",  "x": 860, "y": 490, "direction": "west",  "label": "East Entry" },
+    { "id": "SP_G_ENTRY_N",  "x": 300, "y": 60,  "direction": "south", "label": "North Entry" },
+    { "id": "SP_G_ENTRY_S",  "x": 570, "y": 980, "direction": "north", "label": "South Entry" }
   ],
   "navigation": {
     "nodes": [
-      { "id": "MB_G_N1", "x": 375, "y": 500, "type": "hallway" },
-      { "id": "MB_G_N2", "x": 575, "y": 500, "type": "hallway" },
-      {
-        "id": "MB_G_QR_ENTRY",
-        "x": 500,
-        "y": 500,
-        "type": "qr_point",
-        "label": "Center QR"
-      },
-      {
-        "id": "MB_G_STAIRS",
-        "x": 800,
-        "y": 500,
-        "type": "portal",
-        "targetFloor": 1
-      }
+      { "id": "SP_G_N_HALL_N",    "x": 480, "y": 300, "type": "hallway" },
+      { "id": "SP_G_N_HALL_C",    "x": 480, "y": 490, "type": "hallway" },
+      { "id": "SP_G_N_HALL_S",    "x": 480, "y": 680, "type": "hallway" },
+      { "id": "SP_G_QR_ENTRY",    "x": 480, "y": 490, "type": "qr_point", "label": "Ground Floor Center QR" },
+      { "id": "SP_G_STAIR_PORTAL","x": 760, "y": 490, "type": "portal",   "targetFloor": 1, "label": "Stairs to First Floor" }
     ],
     "edges": [
-      { "from": "MB_G_QR_ENTRY", "to": "MB_G_N1", "weight": 125 },
-      { "from": "MB_G_QR_ENTRY", "to": "MB_G_N2", "weight": 75 },
-      { "from": "MB_G_N1", "to": "MB_G_101", "weight": 200 },
-      { "from": "MB_G_N2", "to": "MB_G_STAIRS", "weight": 150 }
+      { "from": "SP_G_ENTRY_W",       "to": "SP_G_N_HALL_C",     "weight": 420 },
+      { "from": "SP_G_ENTRY_E",       "to": "SP_G_STAIR_PORTAL", "weight": 100 },
+      { "from": "SP_G_STAIR_PORTAL",  "to": "SP_G_N_HALL_C",     "weight": 280 },
+      { "from": "SP_G_N_HALL_C",      "to": "SP_G_N_HALL_N",     "weight": 190 },
+      { "from": "SP_G_N_HALL_C",      "to": "SP_G_N_HALL_S",     "weight": 190 },
+      { "from": "SP_G_N_HALL_N",      "to": "SP_G_101",           "weight": 180 },
+      { "from": "SP_G_N_HALL_N",      "to": "SP_G_103",           "weight": 110 },
+      { "from": "SP_G_N_HALL_N",      "to": "SP_G_104",           "weight": 130 },
+      { "from": "SP_G_N_HALL_N",      "to": "SP_G_105",           "weight": 120 },
+      { "from": "SP_G_N_HALL_S",      "to": "SP_G_106",           "weight": 120 },
+      { "from": "SP_G_N_HALL_S",      "to": "SP_G_107",           "weight": 220 },
+      { "from": "SP_G_N_HALL_S",      "to": "SP_G_108",           "weight": 110 },
+      { "from": "SP_G_N_HALL_S",      "to": "SP_G_110",           "weight": 180 }
     ]
   }
 }

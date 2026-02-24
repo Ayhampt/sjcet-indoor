@@ -16,7 +16,7 @@ export function MapCanvas({
   pathSegments,
   onRoomClick,
   selectedRoomId,
-  userLocation = { x: 100, y: 100 },
+  userLocation = { x: 160, y: 100 },
 }: MapCanvasProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [scale, setScale] = useState(1);
@@ -233,29 +233,7 @@ export function MapCanvas({
           </>
         )}
 
-        {/* User location (blue dot) */}
-        {userLocation && (
-          <g>
-            <circle
-              cx={userLocation.x}
-              cy={userLocation.y}
-              r="8"
-              fill="#3b82f6"
-              opacity="0.8"
-              filter="url(#pathGlow)"
-            />
-            <circle
-              cx={userLocation.x}
-              cy={userLocation.y}
-              r="8"
-              fill="none"
-              stroke="#3b82f6"
-              strokeWidth="2"
-              opacity="0.4"
-              className="animate-pulse-ring"
-            />
-          </g>
-        )}
+        
 
         {/* Waypoints along path */}
         {pathSegments.slice(1, -1).map((point, i) => (

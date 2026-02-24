@@ -7,96 +7,136 @@
   },
   "rooms": [
     {
-      "id": "MB_F2_301",
-      "name": "Advanced Lab",
-      "x": 100,
-      "y": 100,
-      "w": 250,
-      "h": 400,
-      "type": "lab"
+      "id": "SP_2_301",
+      "name": "Lecture Hall",
+      "roomNumber": "301",
+      "x": 60,
+      "y": 60,
+      "w": 260,
+      "h": 330,
+      "type": "lecture",
+      "color": "#9575CD"
     },
     {
-      "id": "MB_F2_302",
-      "name": "Conference Room",
-      "x": 400,
-      "y": 100,
-      "w": 200,
-      "h": 250,
-      "type": "conference"
-    },
-    {
-      "id": "MB_F2_303",
-      "name": "Administrative Office",
-      "x": 650,
-      "y": 80,
-      "w": 180,
-      "h": 120,
-      "type": "office"
-    },
-    {
-      "id": "MB_F2_304",
-      "name": "Research Lab",
-      "x": 600,
-      "y": 200,
-      "w": 280,
-      "h": 320,
-      "type": "lab"
-    },
-    {
-      "id": "MB_F2_305",
-      "name": "Classroom B",
-      "x": 100,
-      "y": 600,
-      "w": 250,
-      "h": 350,
-      "type": "classroom"
-    },
-    {
-      "id": "MB_F2_306",
-      "name": "Study Room",
-      "x": 400,
-      "y": 700,
-      "w": 200,
-      "h": 250,
-      "type": "classroom"
-    },
-    {
-      "id": "MB_F2_307",
-      "name": "Washroom",
-      "x": 700,
-      "y": 600,
+      "id": "SP_2_302",
+      "name": "Lecture Hall",
+      "roomNumber": "302",
+      "x": 330,
+      "y": 60,
       "w": 150,
-      "h": 100,
-      "type": "restroom"
+      "h": 215,
+      "type": "lecture",
+      "color": "#4DD0E1"
+    },
+    {
+      "id": "SP_2_303",
+      "name": "Department Library",
+      "roomNumber": "303",
+      "x": 490,
+      "y": 60,
+      "w": 310,
+      "h": 330,
+      "type": "library",
+      "color": "#FFE082"
+    },
+    {
+      "id": "SP_2_304",
+      "name": "Lecture Hall",
+      "roomNumber": "304",
+      "x": 490,
+      "y": 400,
+      "w": 310,
+      "h": 200,
+      "type": "lecture",
+      "color": "#66BB6A"
+    },
+    {
+      "id": "SP_2_305",
+      "name": "Seminar Hall",
+      "roomNumber": "305",
+      "x": 490,
+      "y": 610,
+      "w": 310,
+      "h": 330,
+      "type": "seminar",
+      "color": "#BA68C8"
+    },
+    {
+      "id": "SP_2_306",
+      "name": "Research & Development Lab",
+      "roomNumber": "306",
+      "x": 330,
+      "y": 610,
+      "w": 150,
+      "h": 330,
+      "type": "lab",
+      "color": "#F06292"
+    },
+    {
+      "id": "SP_2_307",
+      "name": "Lecture Hall",
+      "roomNumber": "307",
+      "x": 60,
+      "y": 570,
+      "w": 260,
+      "h": 370,
+      "type": "lecture",
+      "color": "#FFF9C4"
+    },
+    {
+      "id": "SP_2_308",
+      "name": "IEEE Room",
+      "roomNumber": "308",
+      "x": 60,
+      "y": 400,
+      "w": 260,
+      "h": 160,
+      "type": "office",
+      "color": "#F48FB1"
     }
+  ],
+  "staircases": [
+    {
+      "id": "SP_2_STAIR_A",
+      "x": 335,
+      "y": 295,
+      "w": 55,
+      "h": 55,
+      "label": "Stair A"
+    },
+    {
+      "id": "SP_2_STAIR_B",
+      "x": 335,
+      "y": 510,
+      "w": 55,
+      "h": 55,
+      "label": "Stair B"
+    }
+  ],
+  "entries": [
+    { "id": "SP_2_ENTRY_N", "x": 480, "y": 60,  "direction": "south", "label": "North Entry" },
+    { "id": "SP_2_ENTRY_S", "x": 430, "y": 940, "direction": "north", "label": "South Entry" }
   ],
   "navigation": {
     "nodes": [
-      { "id": "MB_F2_N1", "x": 375, "y": 500, "type": "hallway" },
-      { "id": "MB_F2_N2", "x": 575, "y": 500, "type": "hallway" },
-      { "id": "MB_F2_N3", "x": 650, "y": 400, "type": "hallway" },
-      {
-        "id": "MB_F2_CENTER",
-        "x": 500,
-        "y": 500,
-        "type": "hallway",
-        "label": "Central Hub"
-      },
-      {
-        "id": "MB_F2_STAIRS_DOWN",
-        "x": 800,
-        "y": 300,
-        "type": "portal",
-        "targetFloor": 1
-      }
+      { "id": "SP_2_N_HALL_N",         "x": 480, "y": 280, "type": "hallway" },
+      { "id": "SP_2_N_HALL_C",         "x": 480, "y": 500, "type": "hallway" },
+      { "id": "SP_2_N_HALL_S",         "x": 480, "y": 720, "type": "hallway" },
+      { "id": "SP_2_QR_ENTRY",         "x": 480, "y": 500, "type": "qr_point", "label": "Second Floor Center QR" },
+      { "id": "SP_2_STAIR_PORTAL_DOWN","x": 760, "y": 500, "type": "portal",   "targetFloor": 1, "label": "Stairs to First Floor" }
     ],
     "edges": [
-      { "from": "MB_F2_CENTER", "to": "MB_F2_N1", "weight": 125 },
-      { "from": "MB_F2_CENTER", "to": "MB_F2_N2", "weight": 75 },
-      { "from": "MB_F2_CENTER", "to": "MB_F2_N3", "weight": 150 },
-      { "from": "MB_F2_N1", "to": "MB_F2_301", "weight": 200 },
-      { "from": "MB_F2_N2", "to": "MB_F2_304", "weight": 150 },
-      { "from": "MB_F2_N3", "to": "MB_F2_STAIRS_DOWN", "weight": 100 }
+      { "from": "SP_2_STAIR_PORTAL_DOWN", "to": "SP_2_N_HALL_C",  "weight": 280 },
+      { "from": "SP_2_N_HALL_C",          "to": "SP_2_N_HALL_N",  "weight": 220 },
+      { "from": "SP_2_N_HALL_C",          "to": "SP_2_N_HALL_S",  "weight": 220 },
+      { "from": "SP_2_N_HALL_N",          "to": "SP_2_301",        "weight": 190 },
+      { "from": "SP_2_N_HALL_N",          "to": "SP_2_302",        "weight": 110 },
+      { "from": "SP_2_N_HALL_N",          "to": "SP_2_303",        "weight": 130 },
+      { "from": "SP_2_N_HALL_C",          "to": "SP_2_304",        "weight": 110 },
+      { "from": "SP_2_N_HALL_C",          "to": "SP_2_308",        "weight": 160 },
+      { "from": "SP_2_N_HALL_S",          "to": "SP_2_305",        "weight": 110 },
+      { "from": "SP_2_N_HALL_S",          "to": "SP_2_306",        "weight": 100 },
+      { "from": "SP_2_N_HALL_S",          "to": "SP_2_307",        "weight": 190 }
     ]
   }
 }
