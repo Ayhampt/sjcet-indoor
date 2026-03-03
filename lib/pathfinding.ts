@@ -23,7 +23,9 @@ interface PathfindingConstraints {
 export function buildConstrainedGraph(
   nodes: NavigationNode[],
   edges: NavigationEdge[],
-  constraints?: PathfindingConstraints
+  constraints?: PathfindingConstraints,
+  destinationNodeId?: string,
+  nodeMap?: Map<string, NavigationNode>
 ): Graph {
   const graph: Graph = {};
 
@@ -160,6 +162,10 @@ export function dijkstraWithConstraints(
     previous.set(nodeId, null);
   });
 
+  // Check if end node requires stairs
+  const endNode = nodeMap.get(endNodeId);
+  const endNodeRequiresStairs = endNode?.requiresStairs || endNode?.nodeType === 'stairs_only';
+
   while (unvisited.size > 0) {
     // Find unvisited node with minimum distance
     let currentNodeId: string | null = null;
@@ -188,7 +194,7 @@ export function dijkstraWithConstraints(
     neighbors.forEach(({ node: neighborNode, weight, edge }) => {
       if (unvisited.has(neighborNode.id)) {
         // Apply constraint-based filtering
-        if (!isEdgeAllowedByConstraints(edge, neighborNode, constraints, nodeMap)) {
+        if (!isEdgeAllowedByConstraints(edge, neighborNode, constraints, nodeMap, endNodeRequiresStairs)) {
           return; // Skip this edge
         }
 
@@ -214,19 +220,22 @@ function isEdgeAllowedByConstraints(
   edge: NavigationEdge | undefined,
   targetNode: NavigationNode,
   constraints?: PathfindingConstraints,
-  nodeMap?: Map<string, NavigationNode>
+  nodeMap?: Map<string, NavigationNode>,
+  endNodeRequiresStairs?: boolean
 ): boolean {
-  // If no constraints, allow all edges
-  if (!constraints) return true;
+  // If no constraints and destination doesn't require stairs, allow all edges
+  if (!constraints && !endNodeRequiresStairs) return true;
 
-  // Handle stair restrictions
-  if (edge?.requiresStairs && !constraints.allowStairsOnly) {
-    return false;
-  }
-
-  // Restrict nodes that require stairs unless explicitly allowed
-  if (targetNode.requiresStairs && !constraints.allowStairsOnly) {
-    return false;
+  // When targeting stair-only rooms, block direct access edges
+  if (endNodeRequiresStairs) {
+    // Block direct edges to direct-access junctions when we need stairs
+    if (edge?.type === 'direct' || (targetNode.nodeType === 'accessible_directly' && edge?.type === 'hallway')) {
+      return false;
+    }
+    // Allow stair edges
+    if (edge?.type === 'stairs' || edge?.requiresStairs) {
+      return true;
+    }
   }
 
   return true;

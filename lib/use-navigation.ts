@@ -85,14 +85,16 @@ export function useNavigation(options: UseNavigationOptions) {
         );
 
         // Run Dijkstra's algorithm with constraint support
+        // Rooms 101, 108, and 110 require stair access
+        const isStairOnlyRoom = ['SP_G_101', 'SP_G_108', 'SP_G_110'].includes(destinationRoom.id);
         const result = dijkstraWithConstraints(
           graph,
           startNodeId,
           destinationNode.id,
           nodeMap,
           {
-            allowStairsOnly: destinationRoom.id === 'SP_G_108', // Room 108 requires stairs
-            preferDirectAccess: true,
+            allowStairsOnly: isStairOnlyRoom,
+            preferDirectAccess: !isStairOnlyRoom,
           }
         );
 
