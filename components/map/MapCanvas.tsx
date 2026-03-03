@@ -228,7 +228,7 @@ export function MapCanvas({
               strokeLinejoin="round"
               strokeDasharray="8,4"
               filter="url(#pathGlow)"
-              className="animate-dash"
+              style={{ animation: 'dash 0.5s linear infinite' }}
             />
           </>
         )}

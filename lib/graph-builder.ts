@@ -42,6 +42,10 @@ export function findClosestNode(
   nodesOnFloor: (NavigationNode & { floorLevel: number })[],
   exclude?: string[]
 ): NavigationNode & { floorLevel: number } {
+  if (!nodesOnFloor || nodesOnFloor.length === 0) {
+    throw new Error('No navigation nodes available on this floor');
+  }
+
   let closestNode = nodesOnFloor[0];
   let minDistance = Infinity;
 

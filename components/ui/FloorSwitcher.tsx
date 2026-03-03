@@ -83,7 +83,7 @@ export function FloorSwitcher({
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M5 10l7 7 7-7m0 6v4h-2v-4h-2v4h-2v-4h-2v4h-2v-4H5z"
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
           />
         </svg>
       </button>

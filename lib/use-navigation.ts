@@ -48,8 +48,9 @@ export function useNavigation(options: UseNavigationOptions) {
         setSelectedDestination(destinationRoom);
 
         // Find the floor containing the destination
+        const roomFloorLevel = 'floorLevel' in destinationRoom ? (destinationRoom as any).floorLevel : currentFloor;
         const destinationFloor = floorsData.find(
-          (floor) => floor.floorLevel === (destinationRoom as any).floorLevel
+          (floor) => floor.floorLevel === roomFloorLevel
         );
 
         if (!destinationFloor) {

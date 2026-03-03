@@ -190,17 +190,17 @@ export function Sidebar({
               </p>
               <div className="grid grid-cols-2 gap-2 space-y-0">
                 {[
-                  { icon: '🚻', label: 'Restrooms', type: 'restroom' },
-                  { icon: '☕', label: 'Cafeteria', type: 'cafeteria' },
-                  { icon: '📚', label: 'Library', type: 'library' },
-                  { icon: '🔬', label: 'Labs', type: 'lab' },
+                  { icon: 'WC', label: 'Restrooms', type: 'restroom' },
+                  { icon: 'CAFE', label: 'Cafeteria', type: 'cafeteria' },
+                  { icon: 'LIB', label: 'Library', type: 'library' },
+                  { icon: 'LAB', label: 'Labs', type: 'lab' },
                 ].map((item) => (
                   <button
                     key={item.type}
-                    className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors text-sm font-medium text-slate-700 dark:text-slate-300"
+                    className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors text-sm font-medium text-slate-700 dark:text-slate-300 flex flex-col items-center justify-center"
                   >
-                    <span className="text-lg">{item.icon}</span>
-                    <div className="text-xs mt-1">{item.label}</div>
+                    <div className="text-xs font-bold text-blue-600 dark:text-blue-400 mb-1">{item.icon}</div>
+                    <div className="text-xs text-center">{item.label}</div>
                   </button>
                 ))}
               </div>
