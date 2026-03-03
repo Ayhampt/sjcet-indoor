@@ -1,17 +1,15 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { ChevronDown, MapPin, Navigation } from 'lucide-react';
 import { NavigationNode, Room } from '@/types/map.d';
-import { ChevronDown, MapPin, Waypoints, Grid3x3, Zap } from 'lucide-react';
 
 interface NodeSelectorProps {
   nodes: NavigationNode[];
   rooms: Room[];
   onSelectNode: (node: NavigationNode | Room) => void;
-  selectedNodeId?: string;
   label?: string;
   placeholder?: string;
-  includeJunctionsOnly?: boolean;
   showNodeType?: boolean;
 }
 
@@ -19,175 +17,197 @@ export function NodeSelector({
   nodes,
   rooms,
   onSelectNode,
-  selectedNodeId,
-  label = 'Select Location',
+  label = 'Select a location',
   placeholder = 'Choose a node or room...',
-  includeJunctionsOnly = false,
-  showNodeType = true,
+  showNodeType = false,
 }: NodeSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Filter and organize nodes
-  const filteredNodes = useMemo(() => {
-    let filtered = nodes;
+  // Combine nodes and rooms for selection
+  const allItems = useMemo(() => {
+    return [
+      ...nodes.map((node) => ({
+        id: node.id,
+        name: node.label || node.id,
+        type: 'node' as const,
+        nodeType: node.nodeType || node.type,
+        node,
+      })),
+      ...rooms.map((room) => ({
+        id: room.id,
+        name: `Room ${room.roomNumber} - ${room.name}`,
+        type: 'room' as const,
+        nodeType: room.type,
+        room,
+      })),
+    ];
+  }, [nodes, rooms]);
 
-    if (includeJunctionsOnly) {
-      filtered = filtered.filter(
-        (n) => n.nodeType === 'junction' || n.nodeType === 'stairs_only' || n.nodeType === 'accessible_directly'
-      );
-    }
+  // Filter items based on search query
+  const filteredItems = useMemo(() => {
+    if (!searchQuery) return allItems;
 
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (n) =>
-          n.id?.toLowerCase().includes(query) ||
-          n.label?.toLowerCase().includes(query) ||
-          n.description?.toLowerCase().includes(query)
-      );
-    }
-
-    return filtered;
-  }, [nodes, searchQuery, includeJunctionsOnly]);
-
-  const filteredRooms = useMemo(() => {
-    if (!searchQuery) return rooms;
     const query = searchQuery.toLowerCase();
-    return rooms.filter(
-      (r) =>
-        r.id?.toLowerCase().includes(query) ||
-        r.name?.toLowerCase().includes(query) ||
-        r.roomNumber?.toLowerCase().includes(query)
+    return allItems.filter(
+      (item) =>
+        item.name.toLowerCase().includes(query) ||
+        item.id.toLowerCase().includes(query)
     );
-  }, [rooms, searchQuery]);
+  }, [searchQuery, allItems]);
 
-  const getNodeIcon = (node: NavigationNode) => {
-    switch (node.nodeType) {
+  const handleSelect = (item: typeof allItems[0]) => {
+    if (item.type === 'node' && item.node) {
+      onSelectNode(item.node);
+    } else if (item.type === 'room' && item.room) {
+      onSelectNode(item.room);
+    }
+    setIsOpen(false);
+    setSearchQuery('');
+  };
+
+  const getNodeTypeLabel = (nodeType?: string) => {
+    if (!nodeType) return '';
+    
+    switch (nodeType) {
       case 'junction':
-        return <Grid3x3 className="w-4 h-4 text-purple-500" />;
+        return 'Junction';
       case 'stairs_only':
-        return <Zap className="w-4 h-4 text-orange-500" />;
+        return 'Stairs Only';
       case 'accessible_directly':
-        return <Waypoints className="w-4 h-4 text-blue-500" />;
+        return 'Direct Access';
+      case 'stair_node':
+        return 'Stair Node';
+      case 'qr_point':
+        return 'QR Point';
+      case 'portal':
+        return 'Portal';
       default:
-        return <MapPin className="w-4 h-4 text-slate-500" />;
+        return nodeType.replace(/_/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     }
   };
 
-  const selectedItem = useMemo(() => {
-    if (!selectedNodeId) return null;
-    const node = nodes.find((n) => n.id === selectedNodeId);
-    if (node) return node;
-    return rooms.find((r) => r.id === selectedNodeId);
-  }, [selectedNodeId, nodes, rooms]);
+  const getNodeTypeColor = (nodeType?: string) => {
+    switch (nodeType) {
+      case 'junction':
+        return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300';
+      case 'stairs_only':
+      case 'stair_node':
+        return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300';
+      case 'qr_point':
+        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300';
+      case 'portal':
+        return 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300';
+      default:
+        return 'bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-300';
+    }
+  };
 
   return (
     <div className="w-full">
-      {label && <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{label}</label>}
+      {label && (
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          {label}
+        </label>
+      )}
 
       <div className="relative">
-        {/* Selector button */}
+        {/* Dropdown button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg flex items-center justify-between hover:border-slate-300 dark:hover:border-slate-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+          className="w-full px-4 py-2.5 text-left bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors flex items-center justify-between gap-2"
         >
-          <span className="flex items-center gap-2">
-            {selectedItem ? (
-              <>
-                {selectedItem && 'nodeType' in selectedItem && getNodeIcon(selectedItem as NavigationNode)}
-                <span className="text-slate-900 dark:text-white font-medium">
-                  {(selectedItem as any).label || (selectedItem as any).name || (selectedItem as any).id}
-                </span>
-              </>
-            ) : (
-              <span className="text-slate-500">{placeholder}</span>
-            )}
+          <span className="text-slate-700 dark:text-slate-300 flex items-center gap-2">
+            <MapPin className="w-4 h-4" />
+            {placeholder}
           </span>
-          <ChevronDown
-            className={`w-5 h-5 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          />
+          <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </button>
 
         {/* Dropdown menu */}
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-50">
-            {/* Search box */}
+            {/* Search input */}
             <div className="p-3 border-b border-slate-200 dark:border-slate-700">
               <input
                 type="text"
                 placeholder="Search nodes or rooms..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded transition-colors focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none"
                 autoFocus
               />
             </div>
 
-            {/* Navigation nodes section */}
-            {filteredNodes.length > 0 && (
-              <div className="py-2">
-                <div className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase">Navigation Nodes</div>
-                {filteredNodes.map((node) => (
-                  <button
-                    key={node.id}
-                    onClick={() => {
-                      onSelectNode(node);
-                      setIsOpen(false);
-                      setSearchQuery('');
-                    }}
-                    className={`w-full px-4 py-2.5 text-left flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors ${
-                      selectedNodeId === node.id ? 'bg-blue-50 dark:bg-blue-900/20 border-l-2 border-blue-500' : ''
-                    }`}
-                  >
-                    {getNodeIcon(node)}
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-slate-900 dark:text-white truncate">{node.label || node.id}</div>
-                      {showNodeType && (
-                        <div className="text-xs text-slate-500 dark:text-slate-400">
-                          {node.nodeType || node.type} • {node.description?.substring(0, 30)}...
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+            {/* Items list */}
+            <div className="max-h-60 overflow-y-auto">
+              {filteredItems.length > 0 ? (
+                <div className="py-1">
+                  {/* Group by type */}
+                  {filteredItems.filter((item) => item.type === 'node').length > 0 && (
+                    <>
+                      <p className="px-4 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">
+                        Nodes
+                      </p>
+                      {filteredItems
+                        .filter((item) => item.type === 'node')
+                        .map((item) => (
+                          <button
+                            key={item.id}
+                            onClick={() => handleSelect(item)}
+                            className="w-full text-left px-4 py-2.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-slate-900 dark:text-white truncate">
+                                  {item.name}
+                                </p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">{item.id}</p>
+                              </div>
+                              {showNodeType && item.nodeType && (
+                                <span className={`text-xs font-medium px-2 py-1 rounded whitespace-nowrap ${getNodeTypeColor(item.nodeType)}`}>
+                                  {getNodeTypeLabel(item.nodeType)}
+                                </span>
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                    </>
+                  )}
 
-            {/* Rooms section */}
-            {filteredRooms.length > 0 && (
-              <div className="py-2 border-t border-slate-200 dark:border-slate-700">
-                <div className="px-3 py-2 text-xs font-semibold text-slate-500 uppercase">Rooms</div>
-                {filteredRooms.map((room) => (
-                  <button
-                    key={room.id}
-                    onClick={() => {
-                      onSelectNode(room);
-                      setIsOpen(false);
-                      setSearchQuery('');
-                    }}
-                    className={`w-full px-4 py-2.5 text-left flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors ${
-                      selectedNodeId === room.id ? 'bg-blue-50 dark:bg-blue-900/20 border-l-2 border-blue-500' : ''
-                    }`}
-                  >
-                    <MapPin className="w-4 h-4 text-slate-400" />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-slate-900 dark:text-white truncate">
-                        Room {room.roomNumber}: {room.name}
-                      </div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400">{room.type}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Empty state */}
-            {filteredNodes.length === 0 && filteredRooms.length === 0 && (
-              <div className="px-4 py-6 text-center text-slate-500 dark:text-slate-400 text-sm">
-                No nodes or rooms found
-              </div>
-            )}
+                  {filteredItems.filter((item) => item.type === 'room').length > 0 && (
+                    <>
+                      <p className="px-4 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">
+                        Rooms
+                      </p>
+                      {filteredItems
+                        .filter((item) => item.type === 'room')
+                        .map((item) => (
+                          <button
+                            key={item.id}
+                            onClick={() => handleSelect(item)}
+                            className="w-full text-left px-4 py-2.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-slate-900 dark:text-white truncate">
+                                  {item.name}
+                                </p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">{item.id}</p>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="p-6 text-center">
+                  <Navigation className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
+                  <p className="text-sm text-slate-500 dark:text-slate-400">No results found</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

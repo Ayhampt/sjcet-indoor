@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Navigation, QrCode, MapPin, ArrowRight, AlertCircle, CheckCircle2, Loader, RotateCcw } from 'lucide-react';
+import { Navigation, MapPin, ArrowRight, CheckCircle2, RotateCcw } from 'lucide-react';
 import { NavigationNode, Room, FloorData, NavigationState } from '@/types/map.d';
 import { NodeSelector } from './NodeSelector';
-import { QRScanner } from './QRScanner';
 
 interface NavigationControlPanelProps {
   nodes: NavigationNode[];
@@ -20,14 +19,13 @@ interface NavigationControlPanelProps {
   instructions: string[];
 }
 
-type StartPointSource = 'manual' | 'qr' | 'current_location';
-type DestinationSource = 'manual' | 'qr' | 'search';
+type PointSource = 'manual' | 'current_location';
 
 interface NavigationPoint {
   nodeId?: string;
   roomId?: string;
   label: string;
-  source: StartPointSource | DestinationSource;
+  source: PointSource;
   timestamp: number;
 }
 
@@ -46,9 +44,6 @@ export function NavigationControlPanel({
 }: NavigationControlPanelProps) {
   const [startPoint, setStartPoint] = useState<NavigationPoint | null>(null);
   const [destinationPoint, setDestinationPoint] = useState<NavigationPoint | null>(null);
-  const [qrScannerOpen, setQrScannerOpen] = useState(false);
-  const [scanType, setScanType] = useState<'start' | 'destination'>('destination');
-  const [showHistory, setShowHistory] = useState(false);
 
   // Get current nodes for this floor
   const currentFloorData = floorsData.find((f) => f.floorLevel === currentFloor);
@@ -70,27 +65,12 @@ export function NavigationControlPanel({
     }
   }, [currentFloor]);
 
-  const handleQRScan = (data: { nodeId: string; nodeName: string; type: 'start' | 'destination' }) => {
-    const point: NavigationPoint = {
-      nodeId: data.nodeId,
-      label: data.nodeName,
-      source: 'qr',
-      timestamp: Date.now(),
-    };
-
-    if (data.type === 'start') {
-      setStartPoint(point);
-    } else {
-      setDestinationPoint(point);
-    }
-  };
-
   const handleNodeSelect = (node: NavigationNode | Room, pointType: 'start' | 'destination') => {
     const isRoom = 'roomNumber' in node;
     const point: NavigationPoint = {
       ...(isRoom ? { roomId: node.id } : { nodeId: node.id }),
       label: isRoom ? `Room ${(node as Room).roomNumber}` : (node as NavigationNode).label || node.id,
-      source: pointType === 'start' ? 'manual' : 'manual',
+      source: 'manual',
       timestamp: Date.now(),
     };
 
@@ -111,7 +91,8 @@ export function NavigationControlPanel({
     if (destinationPoint.roomId) {
       const room = rooms.find((r) => r.id === destinationPoint.roomId);
       if (room) {
-        onNavigate(room);
+        // Attach floor level to room for navigation
+        onNavigate({ ...room, floorLevel: currentFloor } as any);
       }
     } else if (destinationPoint.nodeId) {
       const node = nodes.find((n) => n.id === destinationPoint.nodeId);
@@ -127,10 +108,8 @@ export function NavigationControlPanel({
     setDestinationPoint(temp);
   };
 
-  const getSourceIcon = (source: StartPointSource | DestinationSource) => {
+  const getSourceIcon = (source: PointSource) => {
     switch (source) {
-      case 'qr':
-        return <QrCode className="w-4 h-4 text-blue-500" />;
       case 'manual':
         return <MapPin className="w-4 h-4 text-slate-500" />;
       case 'current_location':
@@ -141,38 +120,26 @@ export function NavigationControlPanel({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-4">
+    <div className="w-full space-y-4">
       {/* Navigation Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-4 shadow-lg">
         <div className="flex items-center gap-2 mb-2">
           <Navigation className="w-5 h-5" />
           <h3 className="font-bold">Smart Navigation</h3>
         </div>
-        <p className="text-sm text-blue-100">Select your starting point and destination to find the optimal route</p>
+        <p className="text-sm text-blue-100">Select starting point and destination to find the optimal route</p>
       </div>
 
       {/* Start Point Selector */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="font-semibold text-slate-900 dark:text-white">Starting Point</h4>
-          <button
-            onClick={() => {
-              setScanType('start');
-              setQrScannerOpen(true);
-            }}
-            className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-            title="Scan QR code"
-          >
-            <QrCode className="w-5 h-5 text-blue-500" />
-          </button>
-        </div>
+        <h4 className="font-semibold text-slate-900 dark:text-white mb-3">Starting Point</h4>
 
         {startPoint ? (
           <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-green-50 to-green-100/50 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800 rounded-lg mb-3">
             {getSourceIcon(startPoint.source)}
             <div className="flex-1">
               <p className="font-medium text-green-900 dark:text-green-100">{startPoint.label}</p>
-              <p className="text-xs text-green-700 dark:text-green-300">{startPoint.source === 'qr' ? 'Scanned' : 'Selected'}</p>
+              <p className="text-xs text-green-700 dark:text-green-300">{startPoint.source === 'current_location' ? 'Current Location' : 'Selected'}</p>
             </div>
             <button
               onClick={() => setStartPoint(null)}
@@ -207,26 +174,14 @@ export function NavigationControlPanel({
 
       {/* Destination Selector */}
       <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700 shadow-sm">
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="font-semibold text-slate-900 dark:text-white">Destination</h4>
-          <button
-            onClick={() => {
-              setScanType('destination');
-              setQrScannerOpen(true);
-            }}
-            className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-            title="Scan QR code"
-          >
-            <QrCode className="w-5 h-5 text-blue-500" />
-          </button>
-        </div>
+        <h4 className="font-semibold text-slate-900 dark:text-white mb-3">Destination</h4>
 
         {destinationPoint ? (
           <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-800/20 border border-purple-200 dark:border-purple-800 rounded-lg mb-3">
             {getSourceIcon(destinationPoint.source)}
             <div className="flex-1">
               <p className="font-medium text-purple-900 dark:text-purple-100">{destinationPoint.label}</p>
-              <p className="text-xs text-purple-700 dark:text-purple-300">{destinationPoint.source === 'qr' ? 'Scanned' : 'Selected'}</p>
+              <p className="text-xs text-purple-700 dark:text-purple-300">Selected</p>
             </div>
             <button
               onClick={() => setDestinationPoint(null)}
@@ -313,7 +268,7 @@ export function NavigationControlPanel({
         <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
           <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2 flex items-center gap-2">
             <Navigation className="w-4 h-4" />
-            Navigation Steps
+            Navigation Steps ({instructions.length})
           </h4>
           <div className="space-y-2">
             {instructions.slice(0, 3).map((instruction, idx) => (
@@ -323,24 +278,13 @@ export function NavigationControlPanel({
               </div>
             ))}
             {instructions.length > 3 && (
-              <button
-                onClick={() => setShowHistory(!showHistory)}
-                className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
-              >
+              <p className="text-sm text-blue-600 dark:text-blue-400">
                 +{instructions.length - 3} more steps
-              </button>
+              </p>
             )}
           </div>
         </div>
       )}
-
-      {/* QR Scanner Modal */}
-      <QRScanner
-        isOpen={qrScannerOpen}
-        onClose={() => setQrScannerOpen(false)}
-        scanType={scanType}
-        onScan={handleQRScan}
-      />
     </div>
   );
 }

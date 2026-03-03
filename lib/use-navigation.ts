@@ -44,9 +44,9 @@ export function useNavigation(options: UseNavigationOptions) {
 
   // Navigate to a destination
   const navigateTo = useCallback(
-    (destinationRoom: Room) => {
+    (destinationRoom: Room & { floorLevel?: number }) => {
       try {
-        setSelectedDestination(destinationRoom);
+        setSelectedDestination(destinationRoom as Room);
 
         // Find the floor containing the destination
         const destinationFloor = floorsData.find(

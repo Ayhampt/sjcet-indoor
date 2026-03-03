@@ -7,7 +7,6 @@ import { FloorSwitcher } from '@/components/ui/FloorSwitcher';
 import { NavigationBottomSheet } from '@/components/NavigationBottomSheet';
 import { DestinationCard } from '@/components/DestinationCard';
 import { LoadingSkeleton } from '@/components/LoadingSkeleton';
-import { NavigationControlPanel } from '@/components/navigation/NavigationControlPanel';
 import { useNavigation } from '@/lib/use-navigation';
 import { FloorData } from '@/types/map.d';
 import floorG from '@/data/floors/st-peters/floor-0.json';
@@ -99,48 +98,22 @@ export default function Home() {
       <div className="flex flex-1 w-full h-full overflow-hidden">
         {/* Sidebar - fixed width on desktop */}
         {!isMobile && (
-          <div className="w-96 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-y-auto">
-            {/* Navigation Control Panel */}
-            <div className="p-4 border-b border-slate-200 dark:border-slate-800">
-              <NavigationControlPanel
-                nodes={currentFloorData?.navigation.nodes || []}
-                rooms={currentFloorData?.rooms || []}
-                floorsData={FLOORS_DATA}
-                currentFloor={currentFloor}
-                navigationState={navigationState}
-                selectedDestination={selectedDestination}
-                onNavigate={navigateTo}
-                onClearNavigation={clearNavigation}
-                distance={navigationState?.distance}
-                estimatedTime={navigationState?.estimatedTime}
-                instructions={instructions}
-              />
-            </div>
-
-            {/* Original Sidebar */}
-            <Sidebar
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              searchResults={searchResults}
-              onRoomSelect={navigateTo}
-              selectedRoom={selectedDestination}
-              estimatedTime={navigationState?.estimatedTime}
-              distance={navigationState?.distance}
-              instructions={instructions}
-              navigationActive={!!navigationState}
-              onClearNavigation={clearNavigation}
-              currentFloor={currentFloor}
-              onFloorChange={setCurrentFloor}
-              availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
-              nextFloorChange={nextFloorChange}
-              allRooms={FLOORS_DATA.flatMap((floor) =>
-                floor.rooms.map((room) => ({
-                  ...room,
-                  floorLevel: floor.floorLevel,
-                }))
-              )}
-            />
-          </div>
+          <Sidebar
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            searchResults={searchResults}
+            onRoomSelect={navigateTo}
+            selectedRoom={selectedDestination}
+            estimatedTime={navigationState?.estimatedTime}
+            distance={navigationState?.distance}
+            instructions={instructions}
+            navigationActive={!!navigationState}
+            onClearNavigation={clearNavigation}
+            currentFloor={currentFloor}
+            onFloorChange={setCurrentFloor}
+            availableFloors={FLOORS_DATA.map((f) => f.floorLevel)}
+            nextFloorChange={nextFloorChange}
+          />
         )}
 
         {/* Map area - flex-1 to take remaining space */}
