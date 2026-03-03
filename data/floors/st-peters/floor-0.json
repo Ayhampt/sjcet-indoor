@@ -98,19 +98,26 @@
   "staircases": [
     {
       "id": "SP_G_STAIR_A",
-      "x": 375,
-      "y": 320,
+      "x": 396,
+      "y": 380,
       "w": 55,
       "h": 55,
       "label": "Stair A"
     },
     {
       "id": "SP_G_STAIR_B",
-      "x": 375,
-      "y": 580,
+      "x": 396,
+      "y": 550,
       "w": 55,
       "h": 55,
       "label": "Stair B"
+    }
+  ],
+  "center": [
+    {
+      "x": 425,
+      "y": 490,
+      "label": ""
     }
   ],
   "entries": [
