@@ -11,12 +11,13 @@ import {
   mergeFloorsIntoGraph,
 } from './graph-builder';
 import {
-  buildGraph,
-  dijkstra,
+  buildConstrainedGraph,
+  dijkstraWithConstraints,
   reconstructPath,
   calculateDistance,
   estimateTime,
-} from './dijkstra';
+  validatePathConstraints,
+} from './pathfinding';
 
 interface UseNavigationOptions {
   floorsData: FloorData[];
@@ -59,7 +60,12 @@ export function useNavigation(options: UseNavigationOptions) {
 
         // Merge all floors into a unified graph
         const { allNodes, allEdges } = mergeFloorsIntoGraph(floorsData);
-        const graph = buildGraph(allNodes, allEdges);
+        const graph = buildConstrainedGraph(allNodes, allEdges, {
+          allowStairsOnly: false, // Allow access through stairs for valid routes
+          preferDirectAccess: true, // Prefer direct access where possible
+          startFloor: currentFloor,
+          endFloor: destinationFloor.floorLevel,
+        });
 
         // Find starting node (entry point)
         const startFloor = floorsData.find((f) => f.floorLevel === currentFloor);
@@ -78,8 +84,17 @@ export function useNavigation(options: UseNavigationOptions) {
           nodesOnDestFloor.map((n) => ({ ...n, floorLevel: destinationFloor.floorLevel }))
         );
 
-        // Run Dijkstra's algorithm
-        const result = dijkstra(graph, startNodeId, destinationNode.id);
+        // Run Dijkstra's algorithm with constraint support
+        const result = dijkstraWithConstraints(
+          graph,
+          startNodeId,
+          destinationNode.id,
+          nodeMap,
+          {
+            allowStairsOnly: destinationRoom.id === 'SP_G_108', // Room 108 requires stairs
+            preferDirectAccess: true,
+          }
+        );
 
         // Reconstruct path
         const path = reconstructPath(
@@ -89,6 +104,13 @@ export function useNavigation(options: UseNavigationOptions) {
           nodeMap,
           currentFloor
         );
+
+        // Validate path constraints
+        const pathIds = path.map((p) => p.id);
+        const validation = validatePathConstraints(pathIds, nodeMap, allEdges);
+        if (!validation.valid) {
+          console.warn('Path validation warnings:', validation.violations);
+        }
 
         // Calculate distance and time
         const distance = calculateDistance(path);

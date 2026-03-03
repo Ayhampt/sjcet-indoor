@@ -15,15 +15,22 @@ export interface NavigationNode {
   id: string;
   x: number;
   y: number;
-  type: 'hallway' | 'qr_point' | 'portal' | 'room';
+  type: 'hallway' | 'qr_point' | 'portal' | 'room' | 'junction' | 'stair_node';
   label?: string;
   targetFloor?: number;
+  // Node metadata for constraint-based navigation
+  nodeType?: 'junction' | 'accessible_directly' | 'stairs_only';
+  accessibleRooms?: string[]; // Room IDs directly accessible from this node
+  requiresStairs?: boolean; // Whether access requires stairs
+  description?: string;
 }
 
 export interface NavigationEdge {
   from: string;
   to: string;
   weight: number;
+  type?: 'hallway' | 'stairs' | 'elevator' | 'direct'; // Edge type for constraint checking
+  requiresStairs?: boolean; // Edge only accessible via stairs
 }
 
 export interface FloorData {

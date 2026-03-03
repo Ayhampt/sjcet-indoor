@@ -324,6 +324,68 @@ export function MapCanvas({
           />
         ))}
 
+        {/* ── Navigation Nodes (Junctions, Stairs, etc.) ── */}
+        {floorData.navigation.nodes.map((node) => {
+          const isOnPath = pathSegments.some(
+            (p) => p.id === node.id
+          );
+
+          let nodeColor = '#64748b';
+          let nodeRadius = 4;
+          let strokeWidth = 1;
+
+          if (node.type === 'junction' || node.nodeType === 'junction') {
+            nodeColor = '#8b5cf6'; // Purple for junctions
+            nodeRadius = 5;
+            strokeWidth = 2;
+          } else if (node.type === 'stair_node' || node.nodeType === 'stairs_only') {
+            nodeColor = '#f97316'; // Orange for stairs
+            nodeRadius = 5;
+            strokeWidth = 2;
+          } else if (node.type === 'qr_point') {
+            nodeColor = '#10b981'; // Green for QR points
+            nodeRadius = 4;
+          } else if (node.type === 'portal') {
+            nodeColor = '#ec4899'; // Pink for portals
+            nodeRadius = 6;
+            strokeWidth = 2;
+          }
+
+          if (isOnPath) {
+            nodeRadius += 2;
+            strokeWidth += 1;
+          }
+
+          return (
+            <g key={node.id}>
+              {/* Node circle */}
+              <circle
+                cx={node.x}
+                cy={node.y}
+                r={nodeRadius}
+                fill={isOnPath ? nodeColor : 'none'}
+                stroke={nodeColor}
+                strokeWidth={strokeWidth}
+                opacity={isOnPath ? 0.9 : 0.6}
+              />
+              {/* Node label if it exists */}
+              {node.label && (
+                <text
+                  x={node.x}
+                  y={node.y - nodeRadius - 5}
+                  textAnchor="middle"
+                  fontSize="8"
+                  fill="#475569"
+                  opacity={0.7}
+                  className="pointer-events-none select-none"
+                >
+                  {node.label}
+                </text>
+              )}
+            </g>
+          );
+        })}
+
         {/* ── Navigation path ── */}
         {pathSegments.length > 1 && (
           <polyline
@@ -339,10 +401,29 @@ export function MapCanvas({
           />
         )}
 
-        {/* Waypoints */}
+        {/* Waypoints (path nodes) */}
         {pathSegments.slice(1, -1).map((point, i) => (
-          <circle key={i} cx={point.x} cy={point.y} r="3" fill="#0284c7" opacity="0.6" />
+          <g key={i}>
+            <circle cx={point.x} cy={point.y} r="4" fill="#0284c7" opacity="0.8" />
+            <circle cx={point.x} cy={point.y} r="2" fill="#ffffff" opacity="1" />
+          </g>
         ))}
+
+        {/* Start point marker */}
+        {pathSegments.length > 0 && (
+          <g>
+            <circle cx={pathSegments[0].x} cy={pathSegments[0].y} r="6" fill="#10b981" opacity="0.9" />
+            <circle cx={pathSegments[0].x} cy={pathSegments[0].y} r="3" fill="#ffffff" />
+          </g>
+        )}
+
+        {/* End point marker */}
+        {pathSegments.length > 0 && (
+          <g>
+            <circle cx={pathSegments[pathSegments.length - 1].x} cy={pathSegments[pathSegments.length - 1].y} r="6" fill="#ef4444" opacity="0.9" />
+            <circle cx={pathSegments[pathSegments.length - 1].x} cy={pathSegments[pathSegments.length - 1].y} r="3" fill="#ffffff" />
+          </g>
+        )}
 
         {/* ── User location dot ── */}
         {userLocation && (
