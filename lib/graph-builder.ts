@@ -1,9 +1,11 @@
-import { FloorData, NavigationNode, Room } from '@/types/map.d';
+import { FloorData, NavigationNode, Room } from "@/types/map.d";
 
 /**
  * Builds a searchable room index across all floors
  */
-export function buildRoomIndex(floorsData: FloorData[]): Map<string, Room & { floorLevel: number }> {
+export function buildRoomIndex(
+  floorsData: FloorData[],
+): Map<string, Room & { floorLevel: number }> {
   const roomIndex = new Map<string, Room & { floorLevel: number }>();
 
   floorsData.forEach((floor) => {
@@ -21,7 +23,9 @@ export function buildRoomIndex(floorsData: FloorData[]): Map<string, Room & { fl
 /**
  * Builds a node map for quick lookup during pathfinding
  */
-export function buildNodeMap(floorsData: FloorData[]): Map<string, NavigationNode & { floorLevel: number }> {
+export function buildNodeMap(
+  floorsData: FloorData[],
+): Map<string, NavigationNode & { floorLevel: number }> {
   const nodeMap = new Map<string, NavigationNode & { floorLevel: number }>();
 
   floorsData.forEach((floor) => {
@@ -40,7 +44,7 @@ export function buildNodeMap(floorsData: FloorData[]): Map<string, NavigationNod
 export function findClosestNode(
   room: Room,
   nodesOnFloor: (NavigationNode & { floorLevel: number })[],
-  exclude?: string[]
+  exclude?: string[],
 ): NavigationNode & { floorLevel: number } {
   let closestNode = nodesOnFloor[0];
   let minDistance = Infinity;
@@ -66,7 +70,7 @@ export function findClosestNode(
  */
 export function searchRooms(
   query: string,
-  roomIndex: Map<string, Room & { floorLevel: number }>
+  roomIndex: Map<string, Room & { floorLevel: number }>,
 ): (Room & { floorLevel: number })[] {
   const normalizedQuery = query.toLowerCase().trim();
   if (!normalizedQuery) return [];
@@ -108,7 +112,7 @@ export function mergeFloorsIntoGraph(floorsData: FloorData[]): {
       allNodes.push(node);
 
       // Track portals for multi-floor connectivity
-      if (node.type === 'portal') {
+      if (node.type === "portal") {
         portalMap.set(floor.floorLevel, node.id);
       }
     });
@@ -138,10 +142,7 @@ export function mergeFloorsIntoGraph(floorsData: FloorData[]): {
 /**
  * Gets all rooms on a specific floor
  */
-export function getRoomsOnFloor(
-  floor: FloorData,
-  typeFilter?: string
-): Room[] {
+export function getRoomsOnFloor(floor: FloorData, typeFilter?: string): Room[] {
   if (!typeFilter) return floor.rooms;
   return floor.rooms.filter((room) => room.type === typeFilter);
 }
@@ -151,7 +152,7 @@ export function getRoomsOnFloor(
  */
 export function generateInstructions(
   pathNodes: Array<{ id: string; x: number; y: number; floor: number }>,
-  nodeMap: Map<string, NavigationNode & { floorLevel: number }>
+  nodeMap: Map<string, NavigationNode & { floorLevel: number }>,
 ): string[] {
   const instructions: string[] = [];
 
@@ -167,10 +168,10 @@ export function generateInstructions(
 
     // Handle floor changes
     if (current.floor !== prev.floor) {
-      const direction = current.floor > prev.floor ? 'up' : 'down';
+      const direction = current.floor > prev.floor ? "up" : "down";
       const floors = Math.abs(current.floor - prev.floor);
       instructions.push(
-        `Proceed ${direction} ${floors} floor${floors > 1 ? 's' : ''} via stairs or elevator`
+        `Proceed ${direction} ${floors} floor${floors > 1 ? "s" : ""} via stairs or elevator`,
       );
       continue;
     }
@@ -189,15 +190,17 @@ export function generateInstructions(
 
       if (Math.abs(angle) > 0.2) {
         // 0.2 radians ≈ 11 degrees
-        const direction = angle > 0 ? 'left' : 'right';
+        const direction = angle > 0 ? "left" : "right";
         const distance = Math.sqrt(dx2 * dx2 + dy2 * dy2) * 0.1; // Convert to meters
-        instructions.push(`Turn ${direction}, then proceed ${Math.round(distance)}m`);
+        instructions.push(
+          `Turn ${direction}, then proceed ${Math.round(distance)}m`,
+        );
       }
     }
   }
 
   if (instructions.length === 0) {
-    instructions.push('Follow the highlighted path to your destination');
+    instructions.push("Follow the highlighted path to your destination");
   }
 
   return instructions;

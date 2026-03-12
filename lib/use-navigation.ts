@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useCallback, useMemo } from 'react';
-import { FloorData, NavigationState, PathNode, Room } from '@/types/map.d';
+import { useState, useCallback, useMemo } from "react";
+import { FloorData, NavigationState, PathNode, Room } from "@/types/map.d";
 import {
   buildNodeMap,
   buildRoomIndex,
@@ -9,14 +9,15 @@ import {
   generateInstructions,
   searchRooms,
   mergeFloorsIntoGraph,
-} from './graph-builder';
+} from "./graph-builder";
 import {
-  buildGraph,
-  dijkstra,
+  buildConstrainedGraph,
+  dijkstraWithConstraints,
   reconstructPath,
   calculateDistance,
   estimateTime,
-} from './dijkstra';
+  validatePathConstraints,
+} from "./pathfinding";
 
 interface UseNavigationOptions {
   floorsData: FloorData[];
@@ -27,9 +28,12 @@ export function useNavigation(options: UseNavigationOptions) {
   const { floorsData, startFloor = 0 } = options;
 
   const [currentFloor, setCurrentFloor] = useState(startFloor);
-  const [navigationState, setNavigationState] = useState<NavigationState | null>(null);
-  const [selectedDestination, setSelectedDestination] = useState<Room | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [navigationState, setNavigationState] =
+    useState<NavigationState | null>(null);
+  const [selectedDestination, setSelectedDestination] = useState<Room | null>(
+    null,
+  );
+  const [searchQuery, setSearchQuery] = useState("");
   const [instructions, setInstructions] = useState<string[]>([]);
 
   // Build indices once
@@ -43,26 +47,33 @@ export function useNavigation(options: UseNavigationOptions) {
 
   // Navigate to a destination
   const navigateTo = useCallback(
-    (destinationRoom: Room) => {
+    (destinationRoom: Room & { floorLevel?: number }) => {
       try {
-        setSelectedDestination(destinationRoom);
+        setSelectedDestination(destinationRoom as Room);
 
         // Find the floor containing the destination
         const destinationFloor = floorsData.find(
-          (floor) => floor.floorLevel === (destinationRoom as any).floorLevel
+          (floor) => floor.floorLevel === (destinationRoom as any).floorLevel,
         );
 
         if (!destinationFloor) {
-          console.error('Destination floor not found');
+          console.error("Destination floor not found");
           return;
         }
 
         // Merge all floors into a unified graph
         const { allNodes, allEdges } = mergeFloorsIntoGraph(floorsData);
-        const graph = buildGraph(allNodes, allEdges);
+        const graph = buildConstrainedGraph(allNodes, allEdges, {
+          allowStairsOnly: false, // Allow access through stairs for valid routes
+          preferDirectAccess: true, // Prefer direct access where possible
+          startFloor: currentFloor,
+          endFloor: destinationFloor.floorLevel,
+        });
 
         // Find starting node (entry point)
-        const startFloor = floorsData.find((f) => f.floorLevel === currentFloor);
+        const startFloor = floorsData.find(
+          (f) => f.floorLevel === currentFloor,
+        );
         if (!startFloor) return;
 
         const startNode = startFloor.navigation.nodes[0]; // Default to first node
@@ -70,16 +81,34 @@ export function useNavigation(options: UseNavigationOptions) {
 
         // Find the closest navigation node to the destination room
         const nodesOnDestFloor = allNodes.filter(
-          (n) => floorsData.find((f) => f.navigation.nodes.includes(n as any))?.floorLevel === destinationFloor.floorLevel
+          (n) =>
+            floorsData.find((f) => f.navigation.nodes.includes(n as any))
+              ?.floorLevel === destinationFloor.floorLevel,
         );
 
         const destinationNode = findClosestNode(
           destinationRoom,
-          nodesOnDestFloor.map((n) => ({ ...n, floorLevel: destinationFloor.floorLevel }))
+          nodesOnDestFloor.map((n) => ({
+            ...n,
+            floorLevel: destinationFloor.floorLevel,
+          })),
         );
 
-        // Run Dijkstra's algorithm
-        const result = dijkstra(graph, startNodeId, destinationNode.id);
+        // Run Dijkstra's algorithm with constraint support
+        // Rooms 101, 108, and 110 require stair access
+        const isStairOnlyRoom = ["SP_G_101", "SP_G_108", "SP_G_110"].includes(
+          destinationRoom.id,
+        );
+        const result = dijkstraWithConstraints(
+          graph,
+          startNodeId,
+          destinationNode.id,
+          nodeMap,
+          {
+            allowStairsOnly: isStairOnlyRoom,
+            preferDirectAccess: !isStairOnlyRoom,
+          },
+        );
 
         // Reconstruct path
         const path = reconstructPath(
@@ -87,8 +116,15 @@ export function useNavigation(options: UseNavigationOptions) {
           startNodeId,
           destinationNode.id,
           nodeMap,
-          currentFloor
+          currentFloor,
         );
+
+        // Validate path constraints
+        const pathIds = path.map((p) => p.id);
+        const validation = validatePathConstraints(pathIds, nodeMap, allEdges);
+        if (!validation.valid) {
+          console.warn("Path validation warnings:", validation.violations);
+        }
 
         // Calculate distance and time
         const distance = calculateDistance(path);
@@ -109,11 +145,11 @@ export function useNavigation(options: UseNavigationOptions) {
 
         setInstructions(steps);
       } catch (error) {
-        console.error('Navigation error:', error);
+        console.error("Navigation error:", error);
         setNavigationState(null);
       }
     },
-    [floorsData, currentFloor, nodeMap]
+    [floorsData, currentFloor, nodeMap],
   );
 
   // Clear navigation
@@ -133,13 +169,16 @@ export function useNavigation(options: UseNavigationOptions) {
   const nextFloorChange = useMemo(() => {
     if (!navigationState) return null;
 
-    const currentPathIndex = navigationState.path.findIndex((n) => n.floor === currentFloor);
+    const currentPathIndex = navigationState.path.findIndex(
+      (n) => n.floor === currentFloor,
+    );
     if (currentPathIndex === -1) return null;
 
     for (let i = currentPathIndex; i < navigationState.path.length; i++) {
       if (navigationState.path[i].floor !== currentFloor) {
         return {
-          direction: navigationState.path[i].floor > currentFloor ? 'up' : 'down',
+          direction:
+            navigationState.path[i].floor > currentFloor ? "up" : "down",
           floors: Math.abs(navigationState.path[i].floor - currentFloor),
         };
       }
